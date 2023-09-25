@@ -4,6 +4,7 @@
 * Converts an input image into its ASCII art Image.
 * Supports detailed and simplified ASCII characters.
 * Supports colored and grayscale modes.
+* For True Ascii Art mode, Keep Detailed and Color Mode off
 
 ## Inputs
 
