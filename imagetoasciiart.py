@@ -17,9 +17,9 @@ class ImageToDetailedASCIIArtInvocation(BaseInvocation):
     font_spacing: int = InputField(
         default=6, description="Font size for the ASCII art characters")
     detailed_mode: bool = InputField(
-        default=True, description="Enable detailed mode (default: true)")
+        default=False, description="Enable detailed mode")
     color_mode: bool = InputField(
-        default=False, description="Enable color mode (default: grayscale)")
+        default=False, description="Enable color mode")
 
     def image_to_detailed_ascii_art(self, input_image: Image.Image, font_spacing: int, detailed_mode: bool, color_mode: bool) -> Image.Image:
         if detailed_mode:
