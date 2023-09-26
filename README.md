@@ -11,8 +11,9 @@
 |---------------|---------------------------------------------|
 | `input_image`  | The input image that you want to convert to ASCII art.|
 | `font_spacing` | Font size for the ASCII characters.|
-| `detailed_mode`| Whether to use detailed ASCII characters or not.|
+| `ascii_set`| Choose the desired ASCII character set.|
 | `color_mode`   | Whether to use colors in the ASCII art or not.|
+| `output_to_file`| Output ASCII art to a text file. |
 
 ## Examples
 ![image](https://github.com/mickr777/imagetoasciiimage/assets/115216705/50e0aa52-8977-4d59-967c-24619cadc10e)
