@@ -33,7 +33,7 @@ class ImageToDetailedASCIIArtInvocation(BaseInvocation):
             "High Detail": "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\\|()1{}[]?-_+~<>i!lI;:,\\^`'. ",
             "Medium Detail": "@%#*+=-:. ",
             "Low Detail": "@#=-. ",
-            "Other": " `.-':_,^=;><+!rc*/z?sLTv)J7(|Fi{C}fI31tlu[neoZ5Yxjya]2ESwqkP6h9d4VpOGbUAKXHm8RD#$Bg0MNWQ%&@",
+            "Other": " `.-':_,^=;><+!rc*/z?sLTv)J7(|Fi{C}fI31tlu[neoZ5Yxjya]2ESwqkP6h9d4VpOGbUAKXHm8RD#$Bg0MNWQ%&@"[::-1],
             "Blocks": "[]|-",
             "Binary": "01"
         }
