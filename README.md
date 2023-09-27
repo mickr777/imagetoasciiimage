@@ -13,6 +13,7 @@
 | `font_spacing` | Font size for the ASCII characters.|
 | `ascii_set`| Choose the desired ASCII character set.|
 | `color_mode`   | Whether to use colors in the ASCII art or not.|
+| `invert_colors`   | Invert background color and ASCII character order.|
 | `output_to_file`| Output ASCII art to a text file. |
 
 ## Examples
