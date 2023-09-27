@@ -42,8 +42,20 @@ class ImageToDetailedASCIIArtInvocation(BaseInvocation):
         char_set = sets[self.ascii_set]
         return char_set[::-1] if self.invert_colors else char_set
 
+
     def image_to_detailed_ascii_art(self, input_image: Image.Image, font_spacing: int, color_mode: bool) -> Image.Image:
         ascii_chars = self.get_ascii_chars()
+
+        def adjust_gamma(image, gamma=1.0):
+            invGamma = 1.0 / gamma
+            table = [((i / 255.0) ** invGamma) * 255 for i in range(256)]
+            if image.mode == 'L':
+                return image.point(table)
+            elif image.mode == 'RGB':
+                return image.point(table * 3)
+
+        if self.invert_colors:
+            input_image = adjust_gamma(input_image, 1.5)
 
         if color_mode:
             ascii_art_image = Image.new(
