@@ -26,7 +26,7 @@ class ImageToDetailedASCIIArtInvocation(BaseInvocation):
     color_mode: bool = InputField(
         default=False, description="Enable color mode (default: grayscale)")
     invert_colors: bool = InputField(
-        default=False, description="Invert background color and ASCII character order")
+        default=True, description="Invert background color and ASCII character order")
     output_to_file: bool = InputField(
         default=False, description="Output ASCII art to a text file")
 
