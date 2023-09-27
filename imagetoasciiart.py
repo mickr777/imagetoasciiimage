@@ -25,6 +25,8 @@ class ImageToDetailedASCIIArtInvocation(BaseInvocation):
     )
     color_mode: bool = InputField(
         default=False, description="Enable color mode (default: grayscale)")
+    invert_colors: bool = InputField(
+        default=False, description="Invert background color and ASCII character order")
     output_to_file: bool = InputField(
         default=False, description="Output ASCII art to a text file")
 
@@ -33,23 +35,24 @@ class ImageToDetailedASCIIArtInvocation(BaseInvocation):
             "High Detail": "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\\|()1{}[]?-_+~<>i!lI;:,\\^`'. ",
             "Medium Detail": "@%#*+=-:. ",
             "Low Detail": "@#=-. ",
-            "Other": " `.-':_,^=;><+!rc*/z?sLTv)J7(|Fi{C}fI31tlu[neoZ5Yxjya]2ESwqkP6h9d4VpOGbUAKXHm8RD#$Bg0MNWQ%&@"[::-1],
+            "Other": "08921 ",
             "Blocks": "[]|-",
             "Binary": "01"
         }
-        return sets[self.ascii_set]
+        char_set = sets[self.ascii_set]
+        return char_set[::-1] if self.invert_colors else char_set
 
     def image_to_detailed_ascii_art(self, input_image: Image.Image, font_spacing: int, color_mode: bool) -> Image.Image:
         ascii_chars = self.get_ascii_chars()
 
         if color_mode:
             ascii_art_image = Image.new(
-                "RGB", input_image.size, (255, 255, 255))
+                "RGB", input_image.size, (0, 0, 0) if self.invert_colors else (255, 255, 255))
         else:
-            ascii_art_image = Image.new("L", input_image.size, 255)
+            ascii_art_image = Image.new(
+                "L", input_image.size, 0 if self.invert_colors else 255)
 
         draw = ImageDraw.Draw(ascii_art_image)
-
         num_cols = input_image.width // font_spacing
         num_rows = input_image.height // font_spacing
 
@@ -65,8 +68,9 @@ class ImageToDetailedASCIIArtInvocation(BaseInvocation):
                 if self.ascii_set == "Binary":
                     ascii_index = 0 if pixel_value < 127.5 else 1
                 else:
-                    ascii_index = int(pixel_value * (len(ascii_chars) - 1) / 255)
-                    
+                    ascii_index = int(
+                        pixel_value * (len(ascii_chars) - 1) / 255)
+
                 ascii_char = ascii_chars[ascii_index]
 
                 if color_mode:
@@ -75,8 +79,9 @@ class ImageToDetailedASCIIArtInvocation(BaseInvocation):
                     draw.text((x * font_spacing, y * font_spacing),
                               ascii_char, fill=color)
                 else:
+                    font_color = 255 if self.invert_colors else 0
                     draw.text((x * font_spacing, y * font_spacing),
-                              ascii_char, fill=0)
+                              ascii_char, fill=font_color)
 
         return ascii_art_image
 
