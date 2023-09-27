@@ -19,7 +19,7 @@ class ImageToDetailedASCIIArtInvocation(BaseInvocation):
         description="Input image to convert to ASCII art")
     font_spacing: int = InputField(
         default=6, description="Font size for the ASCII art characters")
-    ascii_set: Literal["High Detail", "Medium Detail", "Low Detail", "Other", "Blocks", "Binary"] = InputField(
+    ascii_set: Literal["High Detail", "Medium Detail", "Low Detail", "Numbers", "Blocks", "Binary"] = InputField(
         default="Medium Detail",
         description="Choose the desired ASCII character set"
     )
@@ -32,10 +32,10 @@ class ImageToDetailedASCIIArtInvocation(BaseInvocation):
 
     def get_ascii_chars(self):
         sets = {
-            "High Detail": "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\\|()1{}[]?-_+~<>i!lI;:,\\^`'. ",
+            "High Detail": "@$B%8WM#&*oahkbdpqwmZO0QLCJYXzcvunxrjft/\|()1{}[]?-+~<>i!lI;:,^'. ",
             "Medium Detail": "@%#*+=-:. ",
             "Low Detail": "@#=-. ",
-            "Other": "08921 ",
+            "Numbers": "9876543210",
             "Blocks": "[]|-",
             "Binary": "01"
         }
@@ -55,7 +55,7 @@ class ImageToDetailedASCIIArtInvocation(BaseInvocation):
                 return image.point(table * 3)
 
         if self.invert_colors:
-            input_image = adjust_gamma(input_image, 1.5)
+            input_image = adjust_gamma(input_image, 1.6)
 
         if color_mode:
             ascii_art_image = Image.new(
@@ -158,6 +158,7 @@ class ImageToDetailedASCIIArtInvocation(BaseInvocation):
             node_id=self.id,
             session_id=context.graph_execution_state_id,
             is_intermediate=self.is_intermediate,
+            workflow=self.workflow,
         )
 
         return ImageOutput(
