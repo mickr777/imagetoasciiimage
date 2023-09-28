@@ -37,7 +37,7 @@ class ImageToUnicodeArtInvocation(BaseInvocation):
         default=8, description="Font size for the Unicode art characters")
     gamma: float = InputField(
         default=1.0, description="Gamma correction value for the output image")
-    ascii_set: Literal[
+    unicode_set: Literal[
         "Shaded",
         "Extended Shading",
         "Intermediate Detail",
@@ -58,7 +58,7 @@ class ImageToUnicodeArtInvocation(BaseInvocation):
         default=None, description="Pick Board to add output too", input=Input.Direct
     )
 
-    def get_ascii_chars(self):
+    def get_unicode_chars(self):
         sets = {
             "Shaded": " ░▒▓█",
             "Extended Shading": " ▁▂▃▄▅▆▇█",
@@ -74,7 +74,7 @@ class ImageToUnicodeArtInvocation(BaseInvocation):
             "Math Symbols": " +−×÷±∓",
             "Stars": " ★☆✦✧✩✪✫✬",
         }
-        return sets[self.ascii_set]
+        return sets[self.uncode_set]
 
     def image_to_unicode_art(self, input_image: Image.Image, font_size: int, color_mode: bool) -> Image.Image:
 
@@ -97,7 +97,7 @@ class ImageToUnicodeArtInvocation(BaseInvocation):
             print("Error loading font:", e)
             raise e
 
-        ascii_chars = self.get_ascii_chars()
+        ascii_chars = self.get_unicode_chars()
 
         if color_mode:
             ascii_art_image = Image.new("RGB", input_image.size, (0, 0, 0))
