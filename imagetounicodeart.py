@@ -74,7 +74,7 @@ class ImageToUnicodeArtInvocation(BaseInvocation):
             "Math Symbols": " +−×÷±∓",
             "Stars": " ★☆✦✧✩✪✫✬",
         }
-        return sets[self.uncode_set]
+        return sets[self.unicode_set]
 
     def image_to_unicode_art(self, input_image: Image.Image, font_size: int, color_mode: bool) -> Image.Image:
 
