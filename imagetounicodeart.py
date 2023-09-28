@@ -53,28 +53,30 @@ class ImageToUnicodeArtInvocation(BaseInvocation):
         "Stars",
     ] = InputField(default="Shaded", description="Use shaded Unicode characters for artwork")
     color_mode: bool = InputField(
-        default=False, description="Enable color mode (default: grayscale)")
+        default=True, description="Enable color mode (default: grayscale)")
+    invert_colors: bool = InputField(
+        default=True, description="Invert background color and ASCII character order")
     board: Optional[BoardField] = InputField(
         default=None, description="Pick Board to add output too", input=Input.Direct
     )
 
     def get_unicode_chars(self):
-        sets = {
-            "Shaded": " ░▒▓█",
-            "Extended Shading": " ▁▂▃▄▅▆▇█",
-            "Intermediate Detail": " □○◐◼",
-            "Checkerboard Patterns": " ▖▗▘▙▚▛▜▝",
-            "Vertical Lines": " │┃┆┇┊┋",
-            "Horizontal Lines": " ─━┄┅┈┉",
-            "Diagonal Lines": " ╲╳╱",
-            "Arrows": " ←↑→↓↔↕↖↗↘↙",
-            "Circles": " ●○◔◕◐◑",
-            "Blocks": " █▇▆▅▄▃▂▁",
-            "Triangles": " ▲△▼▽◀▶◁▷",
-            "Math Symbols": " +−×÷±∓",
-            "Stars": " ★☆✦✧✩✪✫✬",
+        char_set = {
+            "Shaded": "█▓▒░ ",
+            "Extended Shading": "█▇▆▅▄▃▂▁▀",
+            "Intermediate Detail": "◼◐○□ ",
+            "Checkerboard Patterns": "▝▜▛▚▙▘▗▖ ",
+            "Vertical Lines": "┋┊┇┆┃│ ",
+            "Horizontal Lines": "┉┈┅┄━─ ",
+            "Diagonal Lines": "╱╳╲ ",
+            "Arrows": "↙↘↗↖↕↔↓→↑← ",
+            "Circles": "◑◐◕◔○● ",
+            "Blocks": "▁▂▃▄▅▆▇█ ",
+            "Triangles": "▷◁◶▷▽▼△▲ ",
+            "Math Symbols": "∓±÷×−+ ",
+            "Stars": "✬✫✪✩✧✦☆★ ",
         }
-        return sets[self.unicode_set]
+        return char_set[self.unicode_set] if not self.invert_colors else char_set[self.unicode_set][::-1]
 
     def image_to_unicode_art(self, input_image: Image.Image, font_size: int, color_mode: bool) -> Image.Image:
 
@@ -91,6 +93,7 @@ class ImageToUnicodeArtInvocation(BaseInvocation):
         if not os.path.exists(FONT_PATH):
             font_url = "https://candyfonts.com/wp-data/2021/05/09/122551/DejaVuSansMono.ttf"
             download_font(font_url, FONT_PATH)
+        
         try:
             font = ImageFont.truetype(FONT_PATH, font_size)
         except Exception as e:
@@ -100,9 +103,11 @@ class ImageToUnicodeArtInvocation(BaseInvocation):
         ascii_chars = self.get_unicode_chars()
 
         if color_mode:
-            ascii_art_image = Image.new("RGB", input_image.size, (0, 0, 0))
+            ascii_art_image = Image.new(
+                "RGB", input_image.size, (0, 0, 0) if self.invert_colors else (255, 255, 255))
         else:
-            ascii_art_image = Image.new("L", input_image.size, 0)
+            ascii_art_image = Image.new(
+                "L", input_image.size, 0 if self.invert_colors else 255)
 
         draw = ImageDraw.Draw(ascii_art_image)
 
@@ -127,8 +132,9 @@ class ImageToUnicodeArtInvocation(BaseInvocation):
                     draw.text((x * font_size, y * font_size),
                               ascii_char, fill=color, font=font)
                 else:
+                    font_color = 255 if self.invert_colors else 0
                     draw.text((x * font_size, y * font_size),
-                              ascii_char, fill=255, font=font)
+                              ascii_char, fill=font_color, font=font)
 
         return ascii_art_image
 
