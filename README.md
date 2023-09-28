@@ -25,6 +25,7 @@
 | `font_size` | Font size for the Unicode characters.|
 | `unicode_set`| Choose the desired Unicode character set.|
 | `color_mode`   | Whether to use colors in the Unicode art or not.|
+| `invert_colors`   | Invert background color and Unicode character order.|
 | `gamma` | Gamma correction value for the output image. |
 | `board` | Pick Board to add output too. |
 
