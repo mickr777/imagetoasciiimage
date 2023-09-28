@@ -18,9 +18,9 @@ class ImageToDetailedASCIIArtInvocation(BaseInvocation):
 
     input_image: ImageField = InputField(description="Input image to convert to ASCII art")
     font_spacing: int = InputField(default=6, description="Font size for the ASCII art characters")
-    ascii_set: Literal[
-        "High Detail", "Medium Detail", "Low Detail", "Numbers", "Blocks", "Binary", "Shaded"
-    ] = InputField(default="Medium Detail", description="Choose the desired ASCII character set")
+    ascii_set: Literal["High Detail", "Medium Detail", "Low Detail", "Numbers", "Blocks", "Binary"] = InputField(
+        default="Medium Detail", description="Choose the desired ASCII character set"
+    )
     color_mode: bool = InputField(default=False, description="Enable color mode (default: grayscale)")
     invert_colors: bool = InputField(default=True, description="Invert background color and ASCII character order")
     output_to_file: bool = InputField(default=False, description="Output ASCII art to a text file")
@@ -37,7 +37,6 @@ class ImageToDetailedASCIIArtInvocation(BaseInvocation):
             "Numbers": "9876543210",
             "Blocks": "[]|-",
             "Binary": "01",
-            "Shaded": " ░▒▓█",
         }
         char_set = sets[self.ascii_set]
         return char_set[::-1] if self.invert_colors else char_set
