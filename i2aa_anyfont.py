@@ -101,10 +101,10 @@ class ImageToAAInvocation(BaseInvocation):
         description="The character range to use",
         ui_choice_labels=CHAR_RANGE_LABELS,
     )
-    custom_characters: str = InputField(default="█▓▒░ ", description="Custom Characters only used if Custom is selected from range")
+    custom_characters: str = InputField(default="Custom. ", description="Custom characters. Used if Custom is selected from character range")
     comparison_type: COMPARISON_TYPES = InputField(
         default="MSE",
-        description="Choose the comparison type (Sum of Absolute Differences (SAD), Mean Squared Error (MSE), Structural Similarity Index (SSIM))",
+        description="Choose the comparison type (Sum of Absolute Differences, Mean Squared Error, Structural Similarity Index, Normalized Average Luminance)",
         ui_choice_labels=COMPARISON_TYPE_LABELS,
     )
     mono_comparison: bool = InputField(default=False, description="Convert input image to mono for comparison")
