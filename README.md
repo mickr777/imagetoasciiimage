@@ -6,15 +6,25 @@
 * Supports colored and grayscale modes.
 
 ## Inputs
-
+## Ascii Art Node
 | Parameter     | Description                                 
 |---------------|---------------------------------------------|
 | `input_image`  | The input image that you want to convert to ASCII art.|
-| `font_spacing` | Font size for the ASCII characters.|
+| `font_spacing` | Font spacing for the ASCII characters.|
 | `ascii_set`| Choose the desired ASCII character set.|
 | `color_mode`   | Whether to use colors in the ASCII art or not.|
 | `invert_colors`   | Invert background color and ASCII character order.|
 | `output_to_file`| Output ASCII art to a text file. |
+| `gamma` | Gamma correction value for the output image. |
+| `board` | Pick Board to add output too. |
+
+## Unicode Art Node
+| Parameter     | Description                                 
+|---------------|---------------------------------------------|
+| `input_image`  | The input image that you want to convert to Unicode art.|
+| `font_size` | Font size for the Unicode characters.|
+| `unicode_set`| Choose the desired Unicode character set.|
+| `color_mode`   | Whether to use colors in the Unicode art or not.|
 | `gamma` | Gamma correction value for the output image. |
 | `board` | Pick Board to add output too. |
 
