@@ -11,7 +11,8 @@ from invokeai.app.models.image import ImageCategory, ResourceOrigin
     title="Image to ASCII Art Image",
     tags=["image", "ascii art"],
     category="image",
-    version="0.6.0",
+    version="0.7.0",
+    use_cache=False,
 )
 class ImageToDetailedASCIIArtInvocation(BaseInvocation):
     """Convert an Image to Ascii Art Image"""
@@ -26,7 +27,7 @@ class ImageToDetailedASCIIArtInvocation(BaseInvocation):
     output_to_file: bool = InputField(default=False, description="Output ASCII art to a text file")
     gamma: float = InputField(default=1.0, description="Gamma correction value for the output image")
     board: Optional[BoardField] = InputField(
-        default=None, description="Pick Board to add output to", input=Input.Direct
+        default=None, description="Pick Board to add output too", input=Input.Direct
     )
 
     def get_ascii_chars(self):
