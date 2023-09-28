@@ -36,8 +36,11 @@
 | `font_path` | Path/Name of the font to use. |
 | `font_size` | Font size for the Unicode characters.|
 | `character_range`| The character range to use.|
+| `custom_characters`| Custom Characters only used if Custom is selected from range|
 | `comparison_type` | Choose the comparison type. |
+| `mono_comparison`   | Convert input image to mono for comparison.|
 | `color_mode`   | Enable color mode (default: grayscale).|
+| `board` | Pick Board to add output too. |
 
 ## Examples
 ![image](https://github.com/mickr777/imagetoasciiimage/assets/115216705/f0a8ee6a-94d9-4108-a660-5103215aac03)
