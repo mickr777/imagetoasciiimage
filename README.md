@@ -17,7 +17,8 @@
 | `output_to_file`| Output ASCII art to a text file. |
 
 ## Examples
-![image](https://github.com/mickr777/imagetoasciiimage/assets/115216705/50e0aa52-8977-4d59-967c-24619cadc10e)
-![e5f948d7-efad-462d-a63c-8402d87d47e8](https://github.com/mickr777/imagetoasciiimage/assets/115216705/0facb04e-4e64-4f95-bc36-35d3c533d0ec)
-![4c547ac0-896d-41b5-a779-e97b0ec4e824](https://github.com/mickr777/imagetoasciiimage/assets/115216705/98b8c7b6-9b57-4f4e-8510-73419c6291cc)
+![image](https://github.com/mickr777/imagetoasciiimage/assets/115216705/f0a8ee6a-94d9-4108-a660-5103215aac03)
+![12491d49-399f-4c32-9c7e-dae869fa97a5](https://github.com/mickr777/imagetoasciiimage/assets/115216705/7f596e75-3992-41e6-a88b-408bcc986da9)
+![c9d214e6-ed8f-4bb9-99bb-24c3a727720d](https://github.com/mickr777/imagetoasciiimage/assets/115216705/46b1b022-af7d-4758-aec3-5c4717e88530)
+
 
