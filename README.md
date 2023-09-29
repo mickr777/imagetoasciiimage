@@ -44,15 +44,17 @@
 
 ## i2aa Any Font Node (skunkworxdark)
 ### Features
-*
+* Comming Soon...
 *
   
 ### Inputs
 | Parameter     | Description                                 
 |---------------|---------------------------------------------|
 | `input_image`  | The input image that you want to convert to Unicode art.|
-| `font_path` | Path/Name of the font to use. |
-| `font_size` | Font size for the Unicode characters.|
+| `font_url` | Path/Name of the font to use. |
+| `local_font_path` | URL address of the font file to download. |
+| `local_font` | Local font file path (overrides font_url) |
+| `font_size` | Name of the local font file to use from the font_cache folder|
 | `character_range`| The character range to use.|
 | `custom_characters`| Custom Characters only used if Custom is selected from range|
 | `comparison_type` | Choose the comparison type. |
