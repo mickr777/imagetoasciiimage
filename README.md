@@ -81,7 +81,13 @@
 <img src="https://github.com/mickr777/imagetoasciiimage/assets/115216705/384155e0-8e12-4753-946e-0804e0dde94c" width="250" /><br />
 
 ### i2aa Any Font Node
-<img src="https://github.com/mickr777/imagetoasciiimage/assets/115216705/fee7f800-a4a8-41e2-a66b-c66e4343307e" width="350" /><br />
-<img src="https://github.com/mickr777/imagetoasciiimage/assets/115216705/1d9c1003-a45f-45c2-aac7-46470bb89330" width="350" /><br />
-
+<img src="https://github.com/mickr777/imagetoasciiimage/assets/115216705/fee7f800-a4a8-41e2-a66b-c66e4343307e" width="300" />
+<img src="https://github.com/mickr777/imagetoasciiimage/assets/21961335/969f8c75-3254-4ab5-b294-8adbf87b2123" width="300" />
+<img src="https://github.com/mickr777/imagetoasciiimage/assets/21961335/8844bc51-5b95-4c41-87f2-3316c7737956" width="300" />
+<img src="https://github.com/mickr777/imagetoasciiimage/assets/21961335/3c7817ae-5159-419b-a023-2459e2b2035b" width="300" />
+<img src="https://github.com/mickr777/imagetoasciiimage/assets/21961335/81c57259-cabd-44a6-b522-c0857976c0cd" width="300" />
+<img src="https://github.com/mickr777/imagetoasciiimage/assets/21961335/264793f3-838a-49bc-9356-0ae674f15cd8" width="300" />
+<br />
+<img src="https://github.com/mickr777/imagetoasciiimage/assets/115216705/1d9c1003-a45f-45c2-aac7-46470bb89330" width="600" />
+<br />
 
