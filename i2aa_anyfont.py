@@ -3,10 +3,18 @@ import string
 from typing import Literal, Optional
 
 import numpy as np
-from PIL import Image, ImageDraw, ImageFont
 import requests
+from PIL import Image, ImageDraw, ImageFont
 
-from invokeai.app.invocations.baseinvocation import BaseInvocation, Input, InputField, InvocationContext, invocation
+from invokeai.app.invocations.baseinvocation import (
+    BaseInvocation,
+    FieldDescriptions,
+    Input,
+    InputField,
+    InvocationContext,
+    invocation,
+)
+from invokeai.app.invocations.metadata import CoreMetadata
 from invokeai.app.invocations.primitives import BoardField, ImageField, ImageOutput
 from invokeai.app.models.image import ImageCategory, ResourceOrigin
 
@@ -114,7 +122,12 @@ class ImageToAAInvocation(BaseInvocation):
     https://github.com/dernyn/256/tree/master this is a great font to use"""
 
     input_image: ImageField = InputField(description="Image to convert to ASCII art")
-    #font_path: str = InputField(default="cour.ttf", description="Name of the font to use")
+    board: Optional[BoardField] = InputField(default=None, description=FieldDescriptions.board, input=Input.Direct)
+    metadata: CoreMetadata = InputField(
+        default=None,
+        description=FieldDescriptions.core_metadata,
+        ui_hidden=True,
+    )
     font_url: Optional[str] = InputField(
         default="https://github.com/dernyn/256/raw/master/Dernyn's-256(baseline).ttf",
         description="URL address of the font file to download",
@@ -139,9 +152,7 @@ class ImageToAAInvocation(BaseInvocation):
     )
     mono_comparison: bool = InputField(default=False, description="Convert input image to mono for comparison")
     color_mode: bool = InputField(default=False, description="Enable color mode (default: grayscale)")
-    board: Optional[BoardField] = InputField(
-        default=None, description="Pick Board to add output too", input=Input.Direct
-    )
+
     def download_font(self, font_url: str) -> str:
         font_filename = font_url.split("/")[-1]
         cache_dir = "font_cache"
@@ -159,7 +170,7 @@ class ImageToAAInvocation(BaseInvocation):
             print("\033[1;32mFont found in cache, using cached version.\033[0m")
 
         return font_path
-    
+
     def get_font_chars(self, font_path, font_size, chars):
         font = ImageFont.truetype(font_path, font_size)
         # chars = CHAR_SETS.get(char_range, [])
@@ -304,9 +315,11 @@ class ImageToAAInvocation(BaseInvocation):
             image=detailed_ascii_art_image,
             image_origin=ResourceOrigin.INTERNAL,
             image_category=ImageCategory.GENERAL,
+            board_id=self.board.board_id if self.board else None,
             node_id=self.id,
             session_id=context.graph_execution_state_id,
             is_intermediate=self.is_intermediate,
+            metadata=self.metadata.dict() if self.metadata else None,
             workflow=self.workflow,
         )
 
