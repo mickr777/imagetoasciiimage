@@ -5,6 +5,7 @@ from PIL import Image, ImageDraw, ImageFont
 from invokeai.app.invocations.baseinvocation import BaseInvocation, Input, InvocationContext, invocation, InputField
 from invokeai.app.invocations.primitives import ImageField, ImageOutput, BoardField
 from invokeai.app.models.image import ImageCategory, ResourceOrigin
+from invokeai.app.invocations.metadata import CoreMetadata
 
 FONT_PATH = "font_cache/DejaVuSansMono.ttf"
 
