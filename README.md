@@ -44,15 +44,15 @@
 
 ## i2aa Any Font Node (skunkworxdark)
 ### Features
-* Converts an input image into its ASCII art image but you can use any font or range of charecters.
+* Converts an input image into its ASCII art image but you can use any font or range of characters.
 * Font download into a font_cache in the same way as the [textfontimage](https://github.com/mickr777/textfontimage) node.
 * Large array of predefined character ranges and an option to provide a custom string of characters.
 * Switch between colored and grayscale output
-* The output image is built by comparing the image one charecter sized block at a time to determin which character to use for that block of the image. For this you can choose comparison methods to use. As a starting point I would recomend using NAL or MSE as these produce the best output in most cases at a reasonable speed. 
-  * `Sum of Absolute Differences` (SAD) - This is a basic math approach to see which charecter is the least different 
-  * `Mean Squared Error` (MSE) - This uses a mathamtical approach that takes into account a bit more of the structutre.
-  * `Structural Similarity` (SSIM) - This is VERY VERY Slow but it attempts to find the charecter with the closest structural similaryity for each block. This sometimes works better if the convert to mono is used and is included only for compleatness.
-  * `Normalized Average Luminance` (NAL) - This very quick and produces quite a good result. It works by calculating the average luminace of each available charecter and then normalises this to the full 0-255 range and the compare ths to the average luminace of each block of the image to determin which is the best charect to use. 
+* The output image is built by comparing the image one character sized block at a time to determine which character to use for that block of the image. For this you can choose comparison methods to use. As a starting point I would recommend using NAL or MSE as these produce the best output in most cases at a reasonable speed. 
+  * `Sum of Absolute Differences` (SAD) - This is a basic math approach to see which character is the least different 
+  * `Mean Squared Error` (MSE) - This uses a mathematical approach that takes into account a bit more of the structure.
+  * `Structural Similarity` (SSIM) - This is VERY VERY Slow but it attempts to find the character with the closest structural similarity for each block. This sometimes works better if the convert to mono is used and is included only for completeness.
+  * `Normalized Average Luminance` (NAL) - This very quick and produces quite a good result. It works by calculating the average luminance of each available character and then normalizes this to the full 0-255 range and the compare ths to the average luminance of each block of the image to determine which is the best character to use. 
 * Can select which board to output to.
   
 ### Inputs
