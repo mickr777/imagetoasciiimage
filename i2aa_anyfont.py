@@ -40,14 +40,14 @@ COMPARISON_TYPES = Literal[
     "SAD",
     "MSE",
     "SSIM",
-    "LUMI",
+    "NAL",
 ]
 
 COMPARISON_TYPE_LABELS = dict(
     SAD="Sum of Absolute Differences",
     MSE="Mean Squared Error",
     SSIM="Structural Similarity",
-    LUMI="Normalized Average Luminance",
+    NAL="Normalized Average Luminance",
 )
 
 CHAR_RANGES = Literal[
@@ -143,10 +143,10 @@ class ImageToAAInvocation(BaseInvocation):
         ui_choice_labels=CHAR_RANGE_LABELS,
     )
     custom_characters: str = InputField(
-        default="Custom. ", description="Custom characters. Used if Custom is selected from character range"
+        default="▁▂▃▄▅▆▇█ ", description="Custom characters. Used if Custom is selected from character range"
     )
     comparison_type: COMPARISON_TYPES = InputField(
-        default="MSE",
+        default="NAL",
         description="Choose the comparison type (Sum of Absolute Differences, Mean Squared Error, Structural Similarity Index, Normalized Average Luminance)",
         ui_choice_labels=COMPARISON_TYPE_LABELS,
     )
@@ -238,7 +238,7 @@ class ImageToAAInvocation(BaseInvocation):
         else:
             char_images_mean = char_images_variance = None
 
-        if comparison_method == "LUMI":
+        if comparison_method == "NAL":
             char_lumi = self.calculate_luminosities(char_images)
         else:
             char_lumi = None
@@ -269,7 +269,7 @@ class ImageToAAInvocation(BaseInvocation):
                         )
                         for c, char_img in char_images.items()
                     }
-                elif comparison_method == "LUMI":  # Average Luminance check
+                elif comparison_method == "NAL":  # Average Luminance check
                     avg_luminosity = np.mean(l_region_array)
                     comparisons = {c: abs(avg_luminosity - char_lumi[c]) for c, char_img in char_images.items()}
 
