@@ -10,7 +10,7 @@ from invokeai.app.invocations.baseinvocation import (
     FieldDescriptions,
 )
 from invokeai.app.invocations.primitives import ImageField, ImageOutput, BoardField
-from invokeai.app.services.image_records.image_records_common import ImageCategory, ResourceOrigin
+from invokeai.app.models.image import ImageCategory, ResourceOrigin
 from invokeai.app.invocations.metadata import CoreMetadata
 
 
