@@ -16,7 +16,7 @@ from invokeai.app.invocations.baseinvocation import (
 )
 from invokeai.app.invocations.metadata import CoreMetadata
 from invokeai.app.invocations.primitives import BoardField, ImageField, ImageOutput
-from invokeai.app.models.image import ImageCategory, ResourceOrigin
+from invokeai.app.services.image_records.image_records_common import ImageCategory, ResourceOrigin
 
 
 def list_local_fonts() -> list:

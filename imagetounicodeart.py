@@ -11,7 +11,7 @@ from invokeai.app.invocations.baseinvocation import (
     FieldDescriptions,
 )
 from invokeai.app.invocations.primitives import ImageField, ImageOutput, BoardField
-from invokeai.app.models.image import ImageCategory, ResourceOrigin
+from invokeai.app.services.image_records.image_records_common import ImageCategory, ResourceOrigin
 from invokeai.app.invocations.metadata import CoreMetadata
 
 FONT_PATH = "font_cache/DejaVuSansMono.ttf"
