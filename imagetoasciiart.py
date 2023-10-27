@@ -8,11 +8,11 @@ from invokeai.app.invocations.baseinvocation import (
     invocation,
     InputField,
     FieldDescriptions,
+    WithMetadata,
+    WithWorkflow,
 )
 from invokeai.app.invocations.primitives import ImageField, ImageOutput, BoardField
-from invokeai.app.models.image import ImageCategory, ResourceOrigin
-from invokeai.app.invocations.metadata import CoreMetadata
-
+from invokeai.app.services.image_records.image_records_common import ImageCategory, ResourceOrigin
 
 @invocation(
     "Image_to_ASCII_Art_Image",
@@ -22,7 +22,7 @@ from invokeai.app.invocations.metadata import CoreMetadata
     version="0.7.0",
     use_cache=False,
 )
-class ImageToDetailedASCIIArtInvocation(BaseInvocation):
+class ImageToDetailedASCIIArtInvocation(BaseInvocation, WithMetadata, WithWorkflow):
     """Convert an Image to Ascii Art Image"""
 
     input_image: ImageField = InputField(description="Input image to convert to ASCII art")
@@ -36,11 +36,6 @@ class ImageToDetailedASCIIArtInvocation(BaseInvocation):
     gamma: float = InputField(default=1.0, description="Gamma correction value for the output image")
     board: Optional[BoardField] = InputField(
         default=None, description="Pick Board to add output too", input=Input.Direct
-    )
-    metadata: CoreMetadata = InputField(
-        default=None,
-        description=FieldDescriptions.core_metadata,
-        ui_hidden=True,
     )
 
     def get_ascii_chars(self):
@@ -158,7 +153,7 @@ class ImageToDetailedASCIIArtInvocation(BaseInvocation):
             node_id=self.id,
             session_id=context.graph_execution_state_id,
             is_intermediate=self.is_intermediate,
-            metadata=self.metadata.dict() if self.metadata else None,
+            metadata=self.metadata,
             workflow=self.workflow,
         )
 
