@@ -9,11 +9,11 @@ from invokeai.app.invocations.baseinvocation import (
     invocation,
     InputField,
     FieldDescriptions,
+    WithMetadata,
+    WithWorkflow,
 )
 from invokeai.app.invocations.primitives import ImageField, ImageOutput, BoardField
-from invokeai.app.models.image import ImageCategory, ResourceOrigin
-from invokeai.app.invocations.metadata import CoreMetadata
-
+from invokeai.app.services.image_records.image_records_common import ImageCategory, ResourceOrigin
 FONT_PATH = "font_cache/DejaVuSansMono.ttf"
 
 
@@ -37,7 +37,7 @@ def download_font(url: str, save_path: str) -> None:
     version="0.2.0",
     use_cache=False,
 )
-class ImageToUnicodeArtInvocation(BaseInvocation):
+class ImageToUnicodeArtInvocation(BaseInvocation, WithMetadata, WithWorkflow):
     """Convert an Image to Unicode Art using Extended Characters"""
 
     input_image: ImageField = InputField(description="Input image to convert to Unicode art")
@@ -62,11 +62,6 @@ class ImageToUnicodeArtInvocation(BaseInvocation):
     invert_colors: bool = InputField(default=True, description="Invert background color and ASCII character order")
     board: Optional[BoardField] = InputField(
         default=None, description="Pick Board to add output too", input=Input.Direct
-    )
-    metadata: CoreMetadata = InputField(
-        default=None,
-        description=FieldDescriptions.core_metadata,
-        ui_hidden=True,
     )
 
     def get_unicode_chars(self):
@@ -152,7 +147,7 @@ class ImageToUnicodeArtInvocation(BaseInvocation):
             node_id=self.id,
             session_id=context.graph_execution_state_id,
             is_intermediate=self.is_intermediate,
-            metadata=self.metadata.dict() if self.metadata else None,
+            metadata=self.metadata,
             workflow=self.workflow,
         )
 
