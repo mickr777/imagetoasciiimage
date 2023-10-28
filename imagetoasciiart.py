@@ -1,39 +1,56 @@
 import os
 from typing import Literal, Optional
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw
 from invokeai.app.invocations.baseinvocation import (
     BaseInvocation,
     Input,
     InvocationContext,
     invocation,
     InputField,
-    FieldDescriptions,
     WithMetadata,
     WithWorkflow,
 )
 from invokeai.app.invocations.primitives import ImageField, ImageOutput, BoardField
-from invokeai.app.services.image_records.image_records_common import ImageCategory, ResourceOrigin
+from invokeai.app.services.image_records.image_records_common import (
+    ImageCategory,
+    ResourceOrigin,
+)
+
 
 @invocation(
     "Image_to_ASCII_Art_Image",
     title="Image to ASCII Art Image",
     tags=["image", "ascii art"],
     category="image",
-    version="0.7.0",
+    version="1.3.4",
     use_cache=False,
 )
 class ImageToDetailedASCIIArtInvocation(BaseInvocation, WithMetadata, WithWorkflow):
     """Convert an Image to Ascii Art Image"""
 
-    input_image: ImageField = InputField(description="Input image to convert to ASCII art")
-    font_spacing: int = InputField(default=6, description="Font spacing for the ASCII art characters")
-    ascii_set: Literal["High Detail", "Medium Detail", "Low Detail", "Numbers", "Blocks", "Binary"] = InputField(
+    input_image: ImageField = InputField(
+        description="Input image to convert to ASCII art"
+    )
+    font_spacing: int = InputField(
+        default=6, description="Font spacing for the ASCII art characters"
+    )
+    ascii_set: Literal[
+        "High Detail", "Medium Detail", "Low Detail", "Numbers", "Blocks", "Binary"
+    ] = InputField(
         default="Medium Detail", description="Choose the desired ASCII character set"
     )
-    color_mode: bool = InputField(default=False, description="Enable color mode (default: grayscale)")
-    invert_colors: bool = InputField(default=True, description="Invert background color and ASCII character order")
-    output_to_file: bool = InputField(default=False, description="Output ASCII art to a text file")
-    gamma: float = InputField(default=1.0, description="Gamma correction value for the output image")
+    color_mode: bool = InputField(
+        default=False, description="Enable color mode (default: grayscale)"
+    )
+    invert_colors: bool = InputField(
+        default=True, description="Invert background color and ASCII character order"
+    )
+    output_to_file: bool = InputField(
+        default=False, description="Output ASCII art to a text file"
+    )
+    gamma: float = InputField(
+        default=1.0, description="Gamma correction value for the output image"
+    )
     board: Optional[BoardField] = InputField(
         default=None, description="Pick Board to add output too", input=Input.Direct
     )
@@ -50,7 +67,9 @@ class ImageToDetailedASCIIArtInvocation(BaseInvocation, WithMetadata, WithWorkfl
         char_set = sets[self.ascii_set]
         return char_set[::-1] if self.invert_colors else char_set
 
-    def image_to_detailed_ascii_art(self, input_image: Image.Image, font_spacing: int, color_mode: bool) -> Image.Image:
+    def image_to_detailed_ascii_art(
+        self, input_image: Image.Image, font_spacing: int, color_mode: bool
+    ) -> Image.Image:
         ascii_chars = self.get_ascii_chars()
 
         def adjust_gamma(image, gamma=1.0):
@@ -64,9 +83,15 @@ class ImageToDetailedASCIIArtInvocation(BaseInvocation, WithMetadata, WithWorkfl
         input_image = adjust_gamma(input_image, gamma=self.gamma)
 
         if color_mode:
-            ascii_art_image = Image.new("RGB", input_image.size, (0, 0, 0) if self.invert_colors else (255, 255, 255))
+            ascii_art_image = Image.new(
+                "RGB",
+                input_image.size,
+                (0, 0, 0) if self.invert_colors else (255, 255, 255),
+            )
         else:
-            ascii_art_image = Image.new("L", input_image.size, 0 if self.invert_colors else 255)
+            ascii_art_image = Image.new(
+                "L", input_image.size, 0 if self.invert_colors else 255
+            )
 
         draw = ImageDraw.Draw(ascii_art_image)
         num_cols = input_image.width // font_spacing
@@ -89,10 +114,16 @@ class ImageToDetailedASCIIArtInvocation(BaseInvocation, WithMetadata, WithWorkfl
 
                 if color_mode:
                     color = input_image.getpixel((x * font_spacing, y * font_spacing))
-                    draw.text((x * font_spacing, y * font_spacing), ascii_char, fill=color)
+                    draw.text(
+                        (x * font_spacing, y * font_spacing), ascii_char, fill=color
+                    )
                 else:
                     font_color = 255 if self.invert_colors else 0
-                    draw.text((x * font_spacing, y * font_spacing), ascii_char, fill=font_color)
+                    draw.text(
+                        (x * font_spacing, y * font_spacing),
+                        ascii_char,
+                        fill=font_color,
+                    )
 
         return ascii_art_image
 
@@ -107,7 +138,9 @@ class ImageToDetailedASCIIArtInvocation(BaseInvocation, WithMetadata, WithWorkfl
 
         for y in range(num_rows):
             for x in range(num_cols):
-                pixel_value = input_image.getpixel((x * font_spacing, y * font_spacing * font_aspect_ratio))
+                pixel_value = input_image.getpixel(
+                    (x * font_spacing, y * font_spacing * font_aspect_ratio)
+                )
                 if isinstance(pixel_value, tuple):
                     pixel_value = pixel_value[0]
                 pixel_value = max(0, min(pixel_value, 255))
@@ -144,7 +177,9 @@ class ImageToDetailedASCIIArtInvocation(BaseInvocation, WithMetadata, WithWorkfl
             with open(filename, "w") as f:
                 f.write(ascii_str)
 
-        detailed_ascii_art_image = self.image_to_detailed_ascii_art(input_image, self.font_spacing, self.color_mode)
+        detailed_ascii_art_image = self.image_to_detailed_ascii_art(
+            input_image, self.font_spacing, self.color_mode
+        )
         mask_dto = context.services.images.create(
             image=detailed_ascii_art_image,
             image_origin=ResourceOrigin.INTERNAL,
