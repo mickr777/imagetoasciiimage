@@ -17,8 +17,9 @@ from invokeai.app.services.image_records.image_records_common import (
     ResourceOrigin,
 )
 
-FONT_PATH = "font_cache/DejaVuSansMono.ttf"
-
+font_cache_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "font_cache")
+os.makedirs(font_cache_dir, exist_ok=True)
+FONT_PATH = os.path.join(font_cache_dir, "DejaVuSansMono.ttf")
 
 def download_font(url: str, save_path: str) -> None:
     font_directory = os.path.dirname(FONT_PATH)
