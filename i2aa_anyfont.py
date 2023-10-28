@@ -22,9 +22,12 @@ from invokeai.app.services.image_records.image_records_common import (
     ResourceOrigin,
 )
 
+font_cache_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "font_cache")
+cache_dir = font_cache_dir
+os.makedirs(cache_dir, exist_ok=True)
+
 
 def list_local_fonts() -> list:
-    cache_dir = "font_cache"
     if not os.path.exists(cache_dir):
         return []
     fonts = [f for f in os.listdir(cache_dir) if f.lower().endswith((".ttf", ".otf"))]
@@ -136,7 +139,7 @@ class ImageToAAInvocation(BaseInvocation, WithMetadata, WithWorkflow):
     local_font_path: Optional[str] = InputField(
         description="Local font file path (overrides font_url)"
     )
-    local_font: Optional[FontLiteral] = InputField(
+    local_font: FontLiteral = InputField(
         default=None,
         description="Name of the local font file to use from the font_cache folder",
     )
@@ -165,20 +168,21 @@ class ImageToAAInvocation(BaseInvocation, WithMetadata, WithWorkflow):
     )
 
     def download_font(self, font_url: str) -> str:
-        font_filename = font_url.split("/")[-1]
-        cache_dir = "font_cache"
-        font_path = f"{cache_dir}/{font_filename}"
-
-        if not os.path.exists(cache_dir):
-            os.makedirs(cache_dir)
+        font_filename = os.path.basename(font_url)
+        font_path = os.path.join(font_cache_dir, font_filename)
 
         if not os.path.isfile(font_path):
-            print("\033[1;31mFont not found in cache, downloading...\033[0m")
-            response = requests.get(font_url)
-            with open(font_path, "wb") as f:
-                f.write(response.content)
+            print("Font not found in cache, downloading...")
+            try:
+                response = requests.get(font_url)
+                response.raise_for_status()
+                with open(font_path, "wb") as f:
+                    f.write(response.content)
+            except requests.RequestException as e:
+                print(f"Error downloading font from {font_url}: {e}")
+                raise e
         else:
-            print("\033[1;32mFont found in cache, using cached version.\033[0m")
+            print("Font found in cache, using cached version.")
 
         return font_path
 
