@@ -8,12 +8,15 @@ from invokeai.app.invocations.baseinvocation import (
     InvocationContext,
     invocation,
     InputField,
-    FieldDescriptions,
     WithMetadata,
     WithWorkflow,
 )
 from invokeai.app.invocations.primitives import ImageField, ImageOutput, BoardField
-from invokeai.app.services.image_records.image_records_common import ImageCategory, ResourceOrigin
+from invokeai.app.services.image_records.image_records_common import (
+    ImageCategory,
+    ResourceOrigin,
+)
+
 FONT_PATH = "font_cache/DejaVuSansMono.ttf"
 
 
@@ -34,15 +37,21 @@ def download_font(url: str, save_path: str) -> None:
     title="Image to Unicode Art",
     tags=["image", "unicode art", "shading"],
     category="image",
-    version="0.2.0",
+    version="1.3.4",
     use_cache=False,
 )
 class ImageToUnicodeArtInvocation(BaseInvocation, WithMetadata, WithWorkflow):
     """Convert an Image to Unicode Art using Extended Characters"""
 
-    input_image: ImageField = InputField(description="Input image to convert to Unicode art")
-    font_size: int = InputField(default=8, description="Font size for the Unicode art characters")
-    gamma: float = InputField(default=1.0, description="Gamma correction value for the output image")
+    input_image: ImageField = InputField(
+        description="Input image to convert to Unicode art"
+    )
+    font_size: int = InputField(
+        default=8, description="Font size for the Unicode art characters"
+    )
+    gamma: float = InputField(
+        default=1.0, description="Gamma correction value for the output image"
+    )
     unicode_set: Literal[
         "Shaded",
         "Extended Shading",
@@ -57,9 +66,15 @@ class ImageToUnicodeArtInvocation(BaseInvocation, WithMetadata, WithWorkflow):
         "Triangles",
         "Math Symbols",
         "Stars",
-    ] = InputField(default="Shaded", description="Use shaded Unicode characters for artwork")
-    color_mode: bool = InputField(default=True, description="Enable color mode (default: grayscale)")
-    invert_colors: bool = InputField(default=True, description="Invert background color and ASCII character order")
+    ] = InputField(
+        default="Shaded", description="Use shaded Unicode characters for artwork"
+    )
+    color_mode: bool = InputField(
+        default=True, description="Enable color mode (default: grayscale)"
+    )
+    invert_colors: bool = InputField(
+        default=True, description="Invert background color and ASCII character order"
+    )
     board: Optional[BoardField] = InputField(
         default=None, description="Pick Board to add output too", input=Input.Direct
     )
@@ -80,9 +95,15 @@ class ImageToUnicodeArtInvocation(BaseInvocation, WithMetadata, WithWorkflow):
             "Math Symbols": "∓±÷×−+ ",
             "Stars": "✬✫✪✩✧✦☆★ ",
         }
-        return char_set[self.unicode_set] if not self.invert_colors else char_set[self.unicode_set][::-1]
+        return (
+            char_set[self.unicode_set]
+            if not self.invert_colors
+            else char_set[self.unicode_set][::-1]
+        )
 
-    def image_to_unicode_art(self, input_image: Image.Image, font_size: int, color_mode: bool) -> Image.Image:
+    def image_to_unicode_art(
+        self, input_image: Image.Image, font_size: int, color_mode: bool
+    ) -> Image.Image:
         def adjust_gamma(image, gamma=1.0):
             invGamma = 1.0 / gamma
             table = [((i / 255.0) ** invGamma) * 255 for i in range(256)]
@@ -94,7 +115,9 @@ class ImageToUnicodeArtInvocation(BaseInvocation, WithMetadata, WithWorkflow):
         input_image = adjust_gamma(input_image, gamma=self.gamma)
 
         if not os.path.exists(FONT_PATH):
-            font_url = "https://candyfonts.com/wp-data/2021/05/09/122551/DejaVuSansMono.ttf"
+            font_url = (
+                "https://candyfonts.com/wp-data/2021/05/09/122551/DejaVuSansMono.ttf"
+            )
             download_font(font_url, FONT_PATH)
 
         try:
@@ -106,9 +129,15 @@ class ImageToUnicodeArtInvocation(BaseInvocation, WithMetadata, WithWorkflow):
         ascii_chars = self.get_unicode_chars()
 
         if color_mode:
-            ascii_art_image = Image.new("RGB", input_image.size, (0, 0, 0) if self.invert_colors else (255, 255, 255))
+            ascii_art_image = Image.new(
+                "RGB",
+                input_image.size,
+                (0, 0, 0) if self.invert_colors else (255, 255, 255),
+            )
         else:
-            ascii_art_image = Image.new("L", input_image.size, 0 if self.invert_colors else 255)
+            ascii_art_image = Image.new(
+                "L", input_image.size, 0 if self.invert_colors else 255
+            )
 
         draw = ImageDraw.Draw(ascii_art_image)
 
@@ -128,16 +157,28 @@ class ImageToUnicodeArtInvocation(BaseInvocation, WithMetadata, WithWorkflow):
 
                 if color_mode:
                     color = input_image.getpixel((x * font_size, y * font_size))
-                    draw.text((x * font_size, y * font_size), ascii_char, fill=color, font=font)
+                    draw.text(
+                        (x * font_size, y * font_size),
+                        ascii_char,
+                        fill=color,
+                        font=font,
+                    )
                 else:
                     font_color = 255 if self.invert_colors else 0
-                    draw.text((x * font_size, y * font_size), ascii_char, fill=font_color, font=font)
+                    draw.text(
+                        (x * font_size, y * font_size),
+                        ascii_char,
+                        fill=font_color,
+                        font=font,
+                    )
 
         return ascii_art_image
 
     def invoke(self, context: InvocationContext) -> ImageOutput:
         input_image = context.services.images.get_pil_image(self.input_image.image_name)
-        shaded_ascii_art_image = self.image_to_unicode_art(input_image, self.font_size, self.color_mode)
+        shaded_ascii_art_image = self.image_to_unicode_art(
+            input_image, self.font_size, self.color_mode
+        )
 
         mask_dto = context.services.images.create(
             image=shaded_ascii_art_image,
