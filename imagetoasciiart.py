@@ -8,7 +8,6 @@ from invokeai.app.invocations.baseinvocation import (
     invocation,
     InputField,
     WithMetadata,
-    WithWorkflow,
 )
 from invokeai.app.invocations.primitives import ImageField, ImageOutput, BoardField
 from invokeai.app.services.image_records.image_records_common import (
@@ -25,7 +24,7 @@ from invokeai.app.services.image_records.image_records_common import (
     version="1.3.4",
     use_cache=False,
 )
-class ImageToDetailedASCIIArtInvocation(BaseInvocation, WithMetadata, WithWorkflow):
+class ImageToDetailedASCIIArtInvocation(BaseInvocation, WithMetadata):
     """Convert an Image to Ascii Art Image"""
 
     input_image: ImageField = InputField(
@@ -189,7 +188,7 @@ class ImageToDetailedASCIIArtInvocation(BaseInvocation, WithMetadata, WithWorkfl
             session_id=context.graph_execution_state_id,
             is_intermediate=self.is_intermediate,
             metadata=self.metadata,
-            workflow=self.workflow,
+            workflow=context.workflow,
         )
 
         return ImageOutput(

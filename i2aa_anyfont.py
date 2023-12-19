@@ -1,3 +1,6 @@
+# repo - https://github.com/mickr777/imagetoasciiimage
+# 2023 skunkworxdark (https://github.com/skunkworxdark)
+
 import os
 import string
 from typing import Literal, Optional
@@ -14,7 +17,6 @@ from invokeai.app.invocations.baseinvocation import (
     InvocationContext,
     invocation,
     WithMetadata,
-    WithWorkflow,
 )
 from invokeai.app.invocations.primitives import BoardField, ImageField, ImageOutput
 from invokeai.app.services.image_records.image_records_common import (
@@ -124,7 +126,7 @@ CHAR_SETS = {
     category="image",
     version="0.3.4",
 )
-class ImageToAAInvocation(BaseInvocation, WithMetadata, WithWorkflow):
+class ImageToAAInvocation(BaseInvocation, WithMetadata):
     """Convert an Image to Ascii Art Image using any font or size
     https://github.com/dernyn/256/tree/master this is a great font to use"""
 
@@ -363,7 +365,7 @@ class ImageToAAInvocation(BaseInvocation, WithMetadata, WithWorkflow):
             session_id=context.graph_execution_state_id,
             is_intermediate=self.is_intermediate,
             metadata=self.metadata,
-            workflow=self.workflow,
+            workflow=context.workflow,
         )
 
         return ImageOutput(
