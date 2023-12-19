@@ -6,9 +6,9 @@
 * Preset ASCII character Sets.
 * Switch between colored and grayscale modes
 * Switch between white and Black Backgrounds with the invert switch
-* Gamma control on output image
+* Gamma control on the output image
 * Output to a text file
-  (due to text file sapincg the output wont look the same as the image in gallery)
+  (due to text file spacing the output won't look the same as the image in the gallery)
 
 ### Inputs
 | Parameter     | Description                                 
@@ -29,7 +29,7 @@
 * Switch between colored and grayscale modes
 * Switch between white and Black Backgrounds with the invert switch
 * Gamma control on output image
-  (an external font is required for unicode, but will be automaticaly downloaded and cahced for future use)
+  (an external font is required for Unicode, but will be automatically downloaded and cached for future use)
   
 ### Inputs
 | Parameter     | Description                                 
@@ -46,13 +46,13 @@
 ### Features
 * Converts an input image into its ASCII art image but you can use any font or range of characters.
 * Font download into a font_cache in the same way as the [textfontimage](https://github.com/mickr777/textfontimage) node.
-* Large array of predefined character ranges and an option to provide a custom string of characters.
+* A large array of predefined character ranges and an option to provide a custom string of characters.
 * Switch between colored and grayscale output
-* The output image is built by comparing the image one character sized block at a time to determine which character to use for that block of the image. For this you can choose comparison methods to use. As a starting point I would recommend using NAL or MSE as these produce the best output in most cases at a reasonable speed. 
+* The output image is built by comparing the image one character-sized block at a time to determine which character to use for that block of the image. For this you can choose comparison methods to use. As a starting point, I would recommend using NAL or MSE as these produce the best output in most cases at a reasonable speed. 
   * `Sum of Absolute Differences` (SAD) - This is a basic math approach to see which character is the least different 
   * `Mean Squared Error` (MSE) - This uses a mathematical approach that takes into account a bit more of the structure.
   * `Structural Similarity` (SSIM) - This is VERY VERY Slow but it attempts to find the character with the closest structural similarity for each block. This sometimes works better if the convert to mono is used and is included only for completeness.
-  * `Normalized Average Luminance` (NAL) - This very quick and produces quite a good result. It works by calculating the average luminance of each available character and then normalizes this to the full 0-255 range and the compare ths to the average luminance of each block of the image to determine which is the best character to use. 
+  * `Normalized Average Luminance` (NAL) - This is very quick and produces quite a good result. It works by calculating the average luminance of each available character and then normalizes this to the full 0-255 range and then compares this to the average luminance of each block of the image to determine which is the best character to use. 
 * Can select which board to output to.
   
 ### Inputs

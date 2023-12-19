@@ -9,7 +9,6 @@ from invokeai.app.invocations.baseinvocation import (
     invocation,
     InputField,
     WithMetadata,
-    WithWorkflow,
 )
 from invokeai.app.invocations.primitives import ImageField, ImageOutput, BoardField
 from invokeai.app.services.image_records.image_records_common import (
@@ -41,7 +40,7 @@ def download_font(url: str, save_path: str) -> None:
     version="1.3.4",
     use_cache=False,
 )
-class ImageToUnicodeArtInvocation(BaseInvocation, WithMetadata, WithWorkflow):
+class ImageToUnicodeArtInvocation(BaseInvocation, WithMetadata):
     """Convert an Image to Unicode Art using Extended Characters"""
 
     input_image: ImageField = InputField(
@@ -190,7 +189,7 @@ class ImageToUnicodeArtInvocation(BaseInvocation, WithMetadata, WithWorkflow):
             session_id=context.graph_execution_state_id,
             is_intermediate=self.is_intermediate,
             metadata=self.metadata,
-            workflow=self.workflow,
+            workflow=context.workflow,
         )
 
         return ImageOutput(
