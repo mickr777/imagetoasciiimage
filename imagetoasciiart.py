@@ -21,7 +21,7 @@ from invokeai.app.services.image_records.image_records_common import (
     title="Image to ASCII Art Image",
     tags=["image", "ascii art"],
     category="image",
-    version="1.3.4",
+    version="1.3.6",
     use_cache=False,
 )
 class ImageToDetailedASCIIArtInvocation(BaseInvocation, WithMetadata):
@@ -151,18 +151,26 @@ class ImageToDetailedASCIIArtInvocation(BaseInvocation, WithMetadata):
         return ascii_str
 
     def get_next_filename(self, base_filename="output.txt"):
-        counter = 0
-        new_filename = base_filename
+        script_directory = os.path.dirname(os.path.abspath(__file__))
+        output_directory = os.path.join(script_directory, "asciiart_output")
+        new_filename = os.path.join(output_directory, base_filename)
 
-        while os.path.exists(os.path.join("asciiart_output", new_filename)):
+        counter = 0
+        while os.path.exists(new_filename):
             counter += 1
-            new_filename = f"output_{counter}.txt"
+            new_filename = os.path.join(
+                output_directory, f"output_{counter}.txt"
+            )
 
         return new_filename
 
     def ensure_directory_exists(self, directory_name="asciiart_output"):
-        if not os.path.exists(directory_name):
-            os.makedirs(directory_name)
+        script_directory = os.path.dirname(os.path.abspath(__file__))
+        directory_path = os.path.join(script_directory, directory_name)
+
+        if not os.path.exists(directory_path):
+            os.makedirs(directory_path)
+        return directory_path
 
     def invoke(self, context: InvocationContext) -> ImageOutput:
         input_image = context.services.images.get_pil_image(self.input_image.image_name)
