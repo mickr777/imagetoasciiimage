@@ -1,12 +1,11 @@
 import os
-from typing import Literal, Optional
+from typing import Literal
 from PIL import Image, ImageDraw
 from invokeai.invocation_api import (
     BaseInvocation,
     InvocationContext,
     invocation,
     InputField,
-    WithMetadata,
     ImageField, 
     ImageOutput, 
 )
@@ -19,7 +18,7 @@ from invokeai.invocation_api import (
     version="1.4.0",
     use_cache=False,
 )
-class ImageToDetailedASCIIArtInvocation(BaseInvocation, WithMetadata):
+class ImageToDetailedASCIIArtInvocation(BaseInvocation):
     """Convert an Image to ASCII Art Image"""
 
     input_image: ImageField = InputField(
