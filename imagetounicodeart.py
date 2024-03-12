@@ -1,19 +1,14 @@
 import os
 import requests
-from typing import Literal, Optional
+from typing import Literal
 from PIL import Image, ImageDraw, ImageFont
-from invokeai.app.invocations.baseinvocation import (
+from invokeai.invocation_api import (
     BaseInvocation,
-    Input,
     InvocationContext,
     invocation,
     InputField,
-    WithMetadata,
-)
-from invokeai.app.invocations.primitives import ImageField, ImageOutput, BoardField
-from invokeai.app.services.image_records.image_records_common import (
-    ImageCategory,
-    ResourceOrigin,
+    ImageField, 
+    ImageOutput,
 )
 
 font_cache_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "font_cache")
@@ -37,10 +32,10 @@ def download_font(url: str, save_path: str) -> None:
     title="Image to Unicode Art",
     tags=["image", "unicode art", "shading"],
     category="image",
-    version="1.3.4",
+    version="1.4.0",
     use_cache=False,
 )
-class ImageToUnicodeArtInvocation(BaseInvocation, WithMetadata):
+class ImageToUnicodeArtInvocation(BaseInvocation):
     """Convert an Image to Unicode Art using Extended Characters"""
 
     input_image: ImageField = InputField(
@@ -74,9 +69,6 @@ class ImageToUnicodeArtInvocation(BaseInvocation, WithMetadata):
     )
     invert_colors: bool = InputField(
         default=True, description="Invert background color and ASCII character order"
-    )
-    board: Optional[BoardField] = InputField(
-        default=None, description="Pick Board to add output too", input=Input.Direct
     )
 
     def get_unicode_chars(self):
@@ -175,25 +167,15 @@ class ImageToUnicodeArtInvocation(BaseInvocation, WithMetadata):
         return ascii_art_image
 
     def invoke(self, context: InvocationContext) -> ImageOutput:
-        input_image = context.services.images.get_pil_image(self.input_image.image_name)
+        input_image = context.images.get_pil(self.input_image.image_name)
         shaded_ascii_art_image = self.image_to_unicode_art(
             input_image, self.font_size, self.color_mode
         )
 
-        mask_dto = context.services.images.create(
-            image=shaded_ascii_art_image,
-            image_origin=ResourceOrigin.INTERNAL,
-            image_category=ImageCategory.GENERAL,
-            board_id=self.board.board_id if self.board else None,
-            node_id=self.id,
-            session_id=context.graph_execution_state_id,
-            is_intermediate=self.is_intermediate,
-            metadata=self.metadata,
-            workflow=context.workflow,
-        )
+        image_dto = context.images.save(image=shaded_ascii_art_image)
 
         return ImageOutput(
-            image=ImageField(image_name=mask_dto.image_name),
-            width=mask_dto.width,
-            height=mask_dto.height,
+            image=ImageField(image_name=image_dto.image_name),
+            width=image_dto.width,
+            height=image_dto.height,
         )
