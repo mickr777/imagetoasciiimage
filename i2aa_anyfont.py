@@ -9,19 +9,13 @@ import numpy as np
 import requests
 from PIL import Image, ImageDraw, ImageFont
 
-from invokeai.app.invocations.baseinvocation import (
+from invokeai.invocation_api import (
     BaseInvocation,
-    FieldDescriptions,
-    Input,
     InputField,
     InvocationContext,
     invocation,
-    WithMetadata,
-)
-from invokeai.app.invocations.primitives import BoardField, ImageField, ImageOutput
-from invokeai.app.services.image_records.image_records_common import (
-    ImageCategory,
-    ResourceOrigin,
+    ImageField,
+    ImageOutput,
 )
 
 font_cache_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "font_cache")
@@ -124,16 +118,14 @@ CHAR_SETS = {
     title="Image to ASCII Art AnyFont",
     tags=["image", "ascii art"],
     category="image",
-    version="0.3.4",
+    version="0.4.0",
+    use_cache=False,
 )
-class ImageToAAInvocation(BaseInvocation, WithMetadata):
+class ImageToAAInvocation(BaseInvocation):
     """Convert an Image to Ascii Art Image using any font or size
     https://github.com/dernyn/256/tree/master this is a great font to use"""
 
     input_image: ImageField = InputField(description="Image to convert to ASCII art")
-    board: Optional[BoardField] = InputField(
-        default=None, description=FieldDescriptions.board, input=Input.Direct
-    )
     font_url: Optional[str] = InputField(
         default="https://github.com/dernyn/256/raw/master/Dernyn's-256(baseline).ttf",
         description="URL address of the font file to download",
@@ -331,7 +323,7 @@ class ImageToAAInvocation(BaseInvocation, WithMetadata):
         return mosaic_img
 
     def invoke(self, context: InvocationContext) -> ImageOutput:
-        input_image = context.services.images.get_pil_image(self.input_image.image_name)
+        input_image = context.images.get_pil(self.input_image.image_name)
 
         if self.local_font and self.local_font != "None":
             font_path = os.path.join("font_cache", self.local_font)
@@ -346,7 +338,7 @@ class ImageToAAInvocation(BaseInvocation, WithMetadata):
             )
             return
 
-        detailed_ascii_art_image = self.convert_image_to_mosaic_weighted(
+        image = self.convert_image_to_mosaic_weighted(
             input_image,
             font_path,
             self.font_size,
@@ -356,20 +348,6 @@ class ImageToAAInvocation(BaseInvocation, WithMetadata):
             self.mono_comparison,
             self.custom_characters,
         )
-        image_dto = context.services.images.create(
-            image=detailed_ascii_art_image,
-            image_origin=ResourceOrigin.INTERNAL,
-            image_category=ImageCategory.GENERAL,
-            board_id=self.board.board_id if self.board else None,
-            node_id=self.id,
-            session_id=context.graph_execution_state_id,
-            is_intermediate=self.is_intermediate,
-            metadata=self.metadata,
-            workflow=context.workflow,
-        )
+        image_dto = context.images.save(image=image)
 
-        return ImageOutput(
-            image=ImageField(image_name=image_dto.image_name),
-            width=image_dto.width,
-            height=image_dto.height,
-        )
+        return ImageOutput.build(image_dto)
