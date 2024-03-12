@@ -174,8 +174,4 @@ class ImageToUnicodeArtInvocation(BaseInvocation):
 
         image_dto = context.images.save(image=shaded_ascii_art_image)
 
-        return ImageOutput(
-            image=ImageField(image_name=image_dto.image_name),
-            width=image_dto.width,
-            height=image_dto.height,
-        )
+        return ImageOutput.build(image_dto)
