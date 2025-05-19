@@ -118,7 +118,7 @@ CHAR_SETS = {
     title="Image to ASCII Art AnyFont",
     tags=["image", "ascii art"],
     category="image",
-    version="0.4.0",
+    version="0.4.1",
     use_cache=False,
 )
 class ImageToAAInvocation(BaseInvocation):
@@ -134,7 +134,7 @@ class ImageToAAInvocation(BaseInvocation):
         description="Local font file path (overrides font_url)"
     )
     local_font: FontLiteral = InputField(
-        default=None,
+        default="None",
         description="Name of the local font file to use from the font_cache folder",
     )
     font_size: int = InputField(
