@@ -15,7 +15,7 @@ from invokeai.invocation_api import (
     title="Image to ASCII Art Image",
     tags=["image", "ascii art"],
     category="image",
-    version="1.4.0",
+    version="1.4.1",
     use_cache=False,
 )
 class ImageToDetailedASCIIArtInvocation(BaseInvocation):
@@ -47,7 +47,7 @@ class ImageToDetailedASCIIArtInvocation(BaseInvocation):
 
     def get_ascii_chars(self):
         sets = {
-            "High Detail": "@$B%8WM#&*oahkbdpqwmZO0QLCJYXzcvunxrjft/\|()1{}[]?-+~<>i!lI;:,^'. ",
+            "High Detail": r"@$B%8WM#&*oahkbdpqwmZO0QLCJYXzcvunxrjft/\|()1{}[]?-+~<>i!lI;:,^'. ",
             "Medium Detail": "@%#*+=-:. ",
             "Low Detail": "@#=-. ",
             "Numbers": "9876543210",
